@@ -1,0 +1,72 @@
+{% extends 'results/base.html' %} 
+{% block title %}Report — {{student.full_name}}{% endblock %} 
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Report: {{ student.full_name }}</h4>
+  <button onclick="window.print()" class="btn btn-outline-secondary btn-sm">
+    Print Report
+  </button>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card p-3 text-center">
+      <div class="text-muted small">GPA</div>
+      <div class="display-5 fw-bold text-primary">{{ gpa }}</div>
+      <div class="text-muted small">out of 4.0</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 text-center">
+      <div class="text-muted small">Overall %</div>
+      <div class="display-5 fw-bold" style="color: #1d9e75">
+        {{ percentage }}%
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-3 text-center">
+      <div class="text-muted small">Pass / Fail</div>
+      <div class="display-5 fw-bold">
+        <span class="text-success">{{ passed }}</span> /
+        <span class="text-danger">{{ failed }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">Subject Results</div>
+  <div class="card-body p-0">
+    <table class="table mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Code</th>
+          <th>Subject</th>
+          <th>Credits</th>
+          <th>Marks</th>
+          <th>%</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+        <tr>
+          <td>{{ r.subject.code }}</td>
+          <td>{{ r.subject.name }}</td>
+          <td>{{ r.subject.credits }}</td>
+          <td>{{ r.marks }}/{{ r.full_marks }}</td>
+          <td>{% widthratio r.marks r.full_marks 100 %}%</td>
+          <td>
+            <span
+              class="badge {% if r.grade == 'F' %}bg-danger{% elif r.grade in 'A+A' %}bg-success{% else %}bg-primary{% endif %}"
+              >{{ r.grade }}</span
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
